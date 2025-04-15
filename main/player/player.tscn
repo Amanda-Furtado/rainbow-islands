@@ -1,0 +1,155 @@
+[gd_scene load_steps=20 format=3 uid="uid://c3k173i4inxa5"]
+
+[ext_resource type="Script" uid="uid://c3mff2yntwnxg" path="res://main/player/player.gd" id="1_vuxkg"]
+[ext_resource type="Texture2D" uid="uid://lhm0qys4l70x" path="res://assets/bubby.png" id="2_howr1"]
+[ext_resource type="PackedScene" uid="uid://d4binmk3ow2wy" path="res://main/state machines/state_machine.tscn" id="3_ssv3l"]
+[ext_resource type="Script" uid="uid://cdvvkre0l2p83" path="res://main/state machines/player states/idle.gd" id="4_4bbr4"]
+[ext_resource type="Script" uid="uid://bppuj0uxj8byq" path="res://main/state machines/player states/run.gd" id="5_iy4cy"]
+[ext_resource type="Script" uid="uid://dbpe4k5x2x3gm" path="res://main/state machines/move_control.gd" id="5_l6plr"]
+[ext_resource type="Script" uid="uid://lwh3n1vx7ehv" path="res://main/state machines/player states/jump.gd" id="6_8xite"]
+[ext_resource type="Script" uid="uid://ckhmbedy3gwbv" path="res://main/state machines/player states/fall.gd" id="7_fawi8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssv3l"]
+atlas = ExtResource("2_howr1")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4bbr4"]
+atlas = ExtResource("2_howr1")
+region = Rect2(128, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6plr"]
+atlas = ExtResource("2_howr1")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8m1i"]
+atlas = ExtResource("2_howr1")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_boii2"]
+atlas = ExtResource("2_howr1")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy4cy"]
+atlas = ExtResource("2_howr1")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xite"]
+atlas = ExtResource("2_howr1")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fawi8"]
+atlas = ExtResource("2_howr1")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xcylc"]
+atlas = ExtResource("2_howr1")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vuxkg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssv3l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4bbr4")
+}],
+"loop": true,
+"name": &"damage",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6plr")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8m1i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_boii2")
+}],
+"loop": true,
+"name": &"fall",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy4cy")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xite")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fawi8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xcylc")
+}],
+"loop": true,
+"name": &"run",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_howr1"]
+size = Vector2(16, 16)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_vuxkg")
+run_speed = 54.0
+
+[node name="Animations" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_vuxkg")
+animation = &"run"
+autoplay = "default"
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_howr1")
+
+[node name="MovementStateMachine" parent="." node_paths=PackedStringArray("starting_state") instance=ExtResource("3_ssv3l")]
+starting_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("run_state", "jump_state", "fall_state")]
+script = ExtResource("4_4bbr4")
+run_state = NodePath("../Run")
+jump_state = NodePath("../Jump")
+fall_state = NodePath("../Fall")
+animation_name = "default"
+metadata/_custom_type_script = "uid://cdvvkre0l2p83"
+
+[node name="Run" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "fall_state")]
+script = ExtResource("5_iy4cy")
+idle_state = NodePath("../Idle")
+jump_state = NodePath("../Jump")
+fall_state = NodePath("../Fall")
+animation_name = "run"
+metadata/_custom_type_script = "uid://bppuj0uxj8byq"
+
+[node name="Jump" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle_state", "run_state", "fall_state")]
+script = ExtResource("6_8xite")
+idle_state = NodePath("../Idle")
+run_state = NodePath("../Run")
+fall_state = NodePath("../Fall")
+animation_name = "jump"
+metadata/_custom_type_script = "uid://lwh3n1vx7ehv"
+
+[node name="Fall" type="Node" parent="MovementStateMachine" node_paths=PackedStringArray("idle_state", "run_state")]
+script = ExtResource("7_fawi8")
+idle_state = NodePath("../Idle")
+run_state = NodePath("../Run")
+animation_name = "fall"
+metadata/_custom_type_script = "uid://ckhmbedy3gwbv"
+
+[node name="MoveControl" type="Node" parent="."]
+script = ExtResource("5_l6plr")
