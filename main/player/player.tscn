@@ -106,6 +106,7 @@ size = Vector2(16, 16)
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_vuxkg")
 run_speed = 54.0
+jump_height = 256.0
 
 [node name="Animations" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -8)
