@@ -6,16 +6,16 @@ class_name Jump extends State
 
 func enter() -> void:
 	super()
-	parent.velocity.y = -parent.jump_height
+	parent.velocity.y = parent.jump_velocity
 
 func process_physics(delta) -> State:
-	apply_gravity(delta)
+	apply_jump_gravity(delta)
 	print(parent.velocity.y)
 	if parent.velocity.y > 0:
 		return fall_state
 	
-	if Input.is_action_just_released("jump") and parent.velocity.y < -parent.jump_height * 0.5:
-		parent.velocity.y = -parent.jump_height * 0.5
+	#if Input.is_action_just_released("jump") and parent.velocity.y < -parent.jump_height * 0.5:
+		#parent.velocity.y = -parent.jump_height * 0.5
 	
 	parent.velocity.x =  parent.run_speed * get_movement_input()
 	

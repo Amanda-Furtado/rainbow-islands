@@ -5,15 +5,9 @@ class_name Fall extends State
 
 func enter():
 	super()
-	gravity_scale = 1.5
-
-
-func exit():
-	gravity_scale = 1.0
-
 
 func process_physics(delta: float) -> State:
-	apply_gravity(delta)
+	apply_fall_gravity(delta)
 
 	parent.velocity.x = get_movement_input() * parent.run_speed
 	parent.move_and_slide()
