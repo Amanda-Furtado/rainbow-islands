@@ -7,7 +7,14 @@ class_name Player extends CharacterBody2D
 ## MOVIMENTO
 
 @export var run_speed: float = 48.0
-@export var jump_height: float = 300.0
+
+@export var jump_height: float 
+@export var jump_time_to_peak: float 
+@export var jump_time_to_descent: float 
+
+@onready var jump_velocity: float = (2.0 * jump_height) / jump_time_to_peak
+@onready var jump_gravity: float = (-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)
+@onready var fall_gravity: float = (-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)
 
 
 func _ready() -> void:
