@@ -37,3 +37,9 @@ func get_half_jump() -> bool:
 
 func apply_gravity(delta: float):
 	parent.velocity.y += gravity * gravity_scale * delta
+
+func apply_jump_gravity(delta: float):
+	parent.velocity.y += parent.jump_gravity * delta
+
+func apply_fall_gravity(delta: float):
+	parent.velocity.y += parent.fall_gravity * delta
